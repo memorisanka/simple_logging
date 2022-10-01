@@ -18,10 +18,14 @@ def login():
         found_user = Users.query.filter_by(name=nickname).first()
 
         if not found_user:
-            flash("You have to register.", "warning")
-        else:
-            session.update({"nick": nickname, "password": password})
-            flash("You've been successfully logged in.", "success")
+            flash("Wrong username or you have to register", "warning")
+        elif found_user:
+            user_password = found_user.password
+            if user_password == password:
+                session.update({"nick": nickname, "password": password})
+                flash("You've been successfully logged in.", "success")
+            else:
+                flash("Wrong password.", "warning")
 
     elif request.method == "GET" and "nick" not in session:
         return render_template("login.html")
@@ -45,7 +49,6 @@ def register():
             db.session.add(new_user)
             db.session.commit()
             session.update({"nick": nickname, "password": password})
-
             flash("You've been successfully registered.", "success")
         elif found_user:
             flash("You've been already registered. Please, log in.", "warning")
