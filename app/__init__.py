@@ -1,7 +1,8 @@
+from datetime import timedelta
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from datetime import timedelta
 from hashlib import md5
+from app.properties import path
 
 
 db = SQLAlchemy()
@@ -12,7 +13,7 @@ def create_app():
     encryptor = md5()
 
     app.permanent_session_lifetime = timedelta(minutes=30)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:KimBasinger@localhost/users_ex1'
+    app.config['SQLALCHEMY_DATABASE_URI'] = path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.secret_key = encryptor.digest()
 
